@@ -1,4 +1,5 @@
 Fake Job Detector
+
 A full-stack web application designed to detect fraudulent job postings using a machine learning model. The application features a Spring Boot backend, a PostgreSQL database hosted on Neon, an HTML/CSS/JavaScript frontend, and a Python Flask backend serving the machine learning model.
 
 Architecture
