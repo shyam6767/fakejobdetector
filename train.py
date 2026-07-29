@@ -10,7 +10,6 @@ df = pd.read_csv(CSV)
 df['combined'] = (
     df['title'].fillna('')+ ' ' +
     df['company_name'].fillna('')+ ' ' +
-    df['location'].fillna('')+ ' ' +
     df['description'].fillna('')+ ' ' +
     df['requirements'].fillna('')+ ' ' +
     df['salary_range'].fillna('')+ ' ' +
@@ -18,7 +17,7 @@ df['combined'] = (
 )
 X = df['combined']
 Y = df['fraudulent']
-vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1,2))
+vectorizer = TfidfVectorizer(max_features=5000)
 X_vectorized = vectorizer.fit_transform(X)
 X_train, X_test, Y_train, Y_test = train_test_split(X_vectorized, Y, test_size=0.2, random_state=42, stratify=Y)
 print("Loading Model")
