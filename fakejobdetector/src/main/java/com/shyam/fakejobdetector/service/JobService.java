@@ -15,7 +15,7 @@ public class JobService {
     @Autowired
     private JobRepository jobRepository;
 
-    private final String FLASK_URL = "https://fakejobdetector-fa3d.onrender.com";
+    private final String FLASK_URL = "https://fakejobdetector-fa3d.onrender.com/predict";
 
     public String analyzeJob(String description) {
         // call Flask API
