@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Job Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #1e1e2e;
+            --accent: #6c63ff;
+            --accent-dim: rgba(108, 99, 255, 0.15);
+            --text: #e8e8f0;
+            --text-dim: #6b6b80;
+            --fake: #ff4d6d;
+            --real: #00d68f;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+        }
+
+        textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 1rem;
+            resize: vertical;
+            min-height: 180px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        textarea::placeholder {
+            color: var(--text-dim);
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.99);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-card {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .result-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .result-value.fake {
+            color: var(--fake);
+        }
+
+        .result-value.real {
+            color: var(--real);
+        }
+
+        .result-message {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .dot {
+            display: inline-block;
+            animation: pulse 1.2s infinite;
+        }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            padding: 0 1rem;
+        }
+
+        .disclaimer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">ML Powered · Logistic Regression</div>
+            <h1>Fake Job<br><span>Detector</span></h1>
+            <p class="subtitle">Using Logistic Regression + TF-IDF</p>
+        </div>
+
+        <div class="card">
+            <label class="form-label">Paste Job Description</label>
+            <textarea id="jobInput" placeholder="Paste the full job listing here — title, description, requirements, salary details..."></textarea>
+            <button id="analyzeBtn" onclick="analyze()">Analyze Listing</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <span class="dot">▪</span>
+            <span class="dot">▪</span>
+            <span class="dot">▪</span>
+            &nbsp; Analyzing listing
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-label">Analysis Result</div>
+            <div class="result-value" id="resultValue"></div>
+            <div class="result-message" id="resultMessage"></div>
+        </div>
+
+        <p class="disclaimer">
+            Beginner-level project · Cloud-hosted on free tier<br>
+            If the page is slow to respond, please wait a moment while the server wakes up.<br>
+            Results are based on a synthetic dataset and may not reflect all real-world cases.
+        </p>
+    </div>
+
+    <script>
+        async function analyze() {
+            const description = document.getElementById('jobInput').value.trim();
+            if (!description) {
+                alert('Please paste a job description first.');
+                return;
+            }
+
+            const btn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            const resultCard = document.getElementById('resultCard');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            resultCard.style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/job/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description })
+                });
+
+                const data = await response.json();
+                const result = data.result;
+
+                const resultValue = document.getElementById('resultValue');
+                const resultMessage = document.getElementById('resultMessage');
+
+                resultValue.textContent = result;
+                resultValue.className = 'result-value ' + result.toLowerCase();
+
+                if (result === 'FAKE') {
+                    resultMessage.textContent = 'This listing shows signs of being fraudulent. Avoid sharing personal details or paying any fees.';
+                } else {
+                    resultMessage.textContent = 'This listing appears legitimate. Always verify independently before applying.';
+                }
+
+                resultCard.style.display = 'block';
+            } catch (error) {
+                alert('Could not connect to server. Make sure Spring Boot is running.');
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
