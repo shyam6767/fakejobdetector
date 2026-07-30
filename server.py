@@ -8,6 +8,10 @@ app = Flask(__name__)
 vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
 model = pickle.load(open("model.pkl", "rb"))
 
+@app.route("/health")
+def health():
+    return "ok", 200
+
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
