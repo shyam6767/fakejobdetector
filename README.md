@@ -3,7 +3,9 @@
 A full-stack web application that detects fraudulent job postings using machine learning. Paste a job description, and the app tells you whether it's **REAL** or **FAKE** — powered by a Logistic Regression + TF-IDF classification model served via a dedicated Python Flask API.
 
 🔗 **Live Demo** → [fakejobdetector2.onrender.com](https://fakejobdetector2.onrender.com/)
-   **Python ML(Logsitic Regression+TF_IDF) Microservice API** -> (https://fakejobdetector-fa3d.onrender.com)
+   
+   
+   **Python ML(Logsitic Regression+TF-IDF) Microservice API** -> (https://fakejobdetector-fa3d.onrender.com)
 
 ---
 
